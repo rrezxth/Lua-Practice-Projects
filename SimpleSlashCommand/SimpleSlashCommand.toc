@@ -1,0 +1,7 @@
+## Interface: 110007
+## Version: 1.0.0
+## Title: SimpleSlashCommand
+## Notes: Write a custom slash command that prints some string inside the chat window.
+## Author: @rrezxth
+
+SimpleSlashCommand.lua
