@@ -1,1 +1,1 @@
-A project folder containing bite-sized addons to practice for WoW API and LUA Programming.
+As of WoW Version: `110007`, all addons in this project are working.
