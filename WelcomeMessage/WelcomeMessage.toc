@@ -1,4 +1,4 @@
-## Interface: 110050
+## Interface: 110007
 ## Version: 1.0.0
 ## Title: WelcomeMessage
 ## Notes: Display a message everytime user logs in or reloads the UI.
