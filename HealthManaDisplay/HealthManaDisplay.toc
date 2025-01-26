@@ -1,7 +1,7 @@
 ## Interface: 110007
 ## Version: 1.0.0
 ## Title: HealthManaDisplay
-## Notes: A basic UI that shows user character's health and mana text on the screen.
+## Notes: A basic UI that shows user character's health and mana text on the screen. Now with movable frame!
 ## Author: @rrezxth
 
 HealthManaDisplay.lua

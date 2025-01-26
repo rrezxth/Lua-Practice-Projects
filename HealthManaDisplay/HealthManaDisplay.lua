@@ -1,10 +1,35 @@
--- Create parent frame
-local healthManaFrame = CreateFrame("Frame", "HealthManaDisplay", UIParent)
-healthManaFrame:SetSize(200, 50)
-healthManaFrame:SetPoint("CENTER", UIParent, "CENTER")
-healthManaFrame:EnableMouse(false)
+-- Using SavedVariables data
+MyAddonSettings = MyAddonSettings or {}
 
--- Create font strings
+-- Create the parent frame
+local healthManaFrame = CreateFrame("Frame", "HealthManaDisplay", UIParent)
+healthManaFrame:SetSize(MyAddonSettings.width or 100, MyAddonSettings.height or 50)
+healthManaFrame:SetPoint(MyAddonSettings.point or "CENTER", UIParent, MyAddonSettings.x or 0, MyAddonSettings.y or 0)
+
+-- Add basic background texture
+local bgTexture = healthManaFrame:CreateTexture(nil, "BACKGROUND")
+bgTexture:SetAllPoints(healthManaFrame)
+bgTexture:SetColorTexture(0, 0, 0, 0.5)
+
+-- Set mouse operations
+healthManaFrame:EnableMouse(true)
+healthManaFrame:SetMovable(true)
+
+healthManaFrame:RegisterForDrag("LeftButton")
+
+healthManaFrame:SetScript("OnDragStart", function(self)
+    self:StartMoving()
+end)
+healthManaFrame:SetScript("OnDragStop", function(self)
+    self:StopMovingOrSizing()
+    -- Save position
+    local point, _, _, x, y = self:GetPoint()
+    MyAddonSettings.point = point
+    MyAddonSettings.x = x
+    MyAddonSettings.y = y
+end)
+
+-- Create font strings for dynamic health and mana
 local healthText = healthManaFrame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
 healthText:SetPoint("TOPLEFT", 10, -10)
 local manaText = healthManaFrame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
@@ -14,6 +39,9 @@ manaText:SetPoint("TOPLEFT", 10, -30)
 healthManaFrame:RegisterEvent("UNIT_HEALTH")
 healthManaFrame:RegisterEvent("UNIT_POWER_UPDATE")
 
+-- Initialize correct health/values on login/reload
+healthManaFrame:RegisterEvent("PLAYER_ENTERING_WORLD") 
+
 -- Function that updates health/mana values
 local function UpdateHealthMana()
     local health = UnitHealth("player")
@@ -22,12 +50,9 @@ local function UpdateHealthMana()
     manaText:SetText("Mana: " .. mana)
 end
 
--- Initialize correct health/values at the beginning
-UpdateHealthMana()
-
 -- Set the script that handles the vents
 healthManaFrame:SetScript("OnEvent", function(self, event, unit)
-    if unit == "player" then
+    if event == "PLAYER_ENTERING_WORLD" or unit == "player" then 
         UpdateHealthMana()
     end
 end)
